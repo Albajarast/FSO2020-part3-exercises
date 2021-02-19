@@ -49,29 +49,33 @@ app.get('/api/persons', (req, res) => {
 app.post('/api/persons', (req, res) => {
   const { name, number } = req.body
 
+  const newPerson = new Person({
+    name: name,
+    number: number,
+    id: generateId(),
+    date: new Date()
+  })
+
   if (!name || !number) {
     return res.status(400).json({
       error: 'No name or number has been provided'
     })
   }
 
-  const foundPerson = persons.find((person) => person.name === name)
-
-  if (foundPerson) {
-    return res.status(400).json({
-      error: 'The name must be unique'
-    })
-  }
-
-  const person = {
-    name: name,
-    number: number,
-    id: generateId(),
-    date: new Date()
-  }
-
-  persons = persons.concat(person)
-  res.json(person)
+  // Person.find({ name: name }).then((foundPerson) => {
+  //   if (foundPerson.length !== 0) {
+  //     res.status(400).json({
+  //       error: 'The name must be unique'
+  //     })
+  //   } else {
+  //     newPerson.save().then((person) => {
+  //       res.json(person)
+  //     })
+  //   }
+  // })
+  newPerson.save().then((person) => {
+    res.json(person)
+  })
 })
 
 app.get('/api/persons/:id', (req, res) => {
