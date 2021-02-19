@@ -54,7 +54,20 @@ app.get('/api/persons', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
   const { name, number } = req.body
-  console.log(name, number)
+
+  if (!name || !number) {
+    return res.status(400).json({
+      error: 'No name or number has been provided'
+    })
+  }
+
+  const foundPerson = persons.find((person) => person.name === name)
+
+  if (foundPerson) {
+    return res.status(400).json({
+      error: 'The name must be unique'
+    })
+  }
 
   const person = {
     name: name,
