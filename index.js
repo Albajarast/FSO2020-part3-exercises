@@ -26,16 +26,20 @@ let persons = [
     name: 'Mary Poppendieck',
     number: '39-23-6423122',
     id: 4
-  },
-  {
-    name: 'David López',
-    number: '985147626',
-    id: 5
   }
 ]
 
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to Phonebook App!</h1>')
+})
+
+app.get('/info', (req, res) => {
+  const requestDate = new Date().toString()
+  const contactNum = persons.length
+
+  res.send(
+    `<p><strong>Your phonebook has ${contactNum} contacts</strong></p><p>${requestDate}<p>`
+  )
 })
 
 app.get('/api/persons', (req, res) => {
