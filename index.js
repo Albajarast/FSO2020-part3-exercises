@@ -29,6 +29,12 @@ let persons = [
   }
 ]
 
+const randomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
+const generateId = () => randomNumber(1, 999999999999)
+
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to Phonebook App!</h1>')
 })
@@ -44,6 +50,21 @@ app.get('/info', (req, res) => {
 
 app.get('/api/persons', (req, res) => {
   res.json(persons)
+})
+
+app.post('/api/persons', (req, res) => {
+  const { name, number } = req.body
+  console.log(name, number)
+
+  const person = {
+    name: name,
+    number: number,
+    id: generateId(),
+    date: new Date()
+  }
+
+  persons = persons.concat(person)
+  res.json(person)
 })
 
 app.get('/api/persons/:id', (req, res) => {
