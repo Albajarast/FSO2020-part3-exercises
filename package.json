@@ -1,0 +1,27 @@
+{
+  "name": "phonebook-app-backend",
+  "version": "1.0.0",
+  "description": "This repository has the exercises for the part 3 \"Node.js and Express\" of the Full Stack Open 2020 Course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Albajarast/FSO2020-part3-exercises.git"
+  },
+  "author": "David López",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Albajarast/FSO2020-part3-exercises/issues"
+  },
+  "homepage": "https://github.com/Albajarast/FSO2020-part3-exercises#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
