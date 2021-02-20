@@ -89,6 +89,24 @@ app.post('/api/persons', (req, res) => {
   })
 })
 
+app.put('/api/persons/:id', (req, res) => {
+  console.log(`You tried to update the id: ${req.params.id}`)
+  const { id } = req.params
+  console.log(req.body)
+  const { name, number } = req.body
+
+  const person = {
+    name: name,
+    number: number
+  }
+
+  Person.findByIdAndUpdate(id, person, { new: true })
+    .then((result) => {
+      res.json(result)
+    })
+    .catch((err) => next(err))
+})
+
 app.get('/api/persons/:id', (req, res) => {
   const { id } = req.params
 
