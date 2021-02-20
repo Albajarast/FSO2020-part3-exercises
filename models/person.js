@@ -12,7 +12,7 @@ mongoose
     useFindAndModify: false,
     useCreateIndex: true
   })
-  .then((result) => {
+  .then(() => {
     console.log(`Connected to MongoDB Atlas as ${process.env.MONGODB_USER}`)
   })
   .catch((error) => {

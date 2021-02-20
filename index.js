@@ -4,7 +4,6 @@ const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
-const { response } = require('express')
 
 const PORT = process.env.PORT
 
@@ -37,8 +36,6 @@ morgan.token('body', (req) => {
 app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :body')
 )
-
-let persons = []
 
 const randomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min)
@@ -121,7 +118,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
-    .then((result) => {
+    .then(() => {
       res.status(204).end()
     })
     .catch((err) => next(err))

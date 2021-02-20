@@ -54,14 +54,14 @@ function getAllPersons() {
   })
 }
 
-function saveNewPerson() {
-  const person = new Person({
-    name: process.argv[3],
-    number: process.argv[4]
-  })
+// function saveNewPerson() {
+//   const person = new Person({
+//     name: process.argv[3],
+//     number: process.argv[4]
+//   })
 
-  person.save().then((result) => {
-    console.log(`${result.name} added to phonebook`)
-    mongoose.connection.close()
-  })
-}
+//   person.save().then((result) => {
+//     console.log(`${result.name} added to phonebook`)
+//     mongoose.connection.close()
+//   })
+// }
