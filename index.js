@@ -8,6 +8,16 @@ const { response } = require('express')
 
 const PORT = process.env.PORT
 
+// Own middlewares
+const errorHandler = (err, req, res, next) => {
+  console.error(err.message)
+
+  if (err.name === 'CastError' && err.kind == 'ObjectId') {
+    return res.status(400).send({ error: 'Wrong id format' })
+  }
+  next(err)
+}
+
 app.use(express.json())
 app.use(cors())
 app.use(express.static('build'))
@@ -91,14 +101,15 @@ app.get('/api/persons/:id', (req, res) => {
   }
 })
 
-app.delete('/api/persons/:id', (req, res) => {
-  const { id } = req.params
-  Person.findByIdAndDelete(id)
+app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
     .then((result) => {
       res.status(204).end()
     })
-    .catch((err) => console.error(err))
+    .catch((err) => next(err))
 })
+
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
