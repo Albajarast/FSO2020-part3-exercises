@@ -12,9 +12,17 @@ const PORT = process.env.PORT
 const errorHandler = (err, req, res, next) => {
   console.error(err.message)
 
-  if (err.name === 'CastError' && err.kind == 'ObjectId') {
-    return res.status(400).send({ error: 'Wrong id format' })
+  if (err.name === 'CastError' && err.kind === 'ObjectId') {
+    return res.status(400).json({ error: 'Wrong id format' })
   }
+
+  if (err.name === 'ValidationError' && err.errors.name.kind === 'unique') {
+    return res.status(400).json({
+      message: 'The person already exists in the DB',
+      error: err.message
+    })
+  }
+
   next(err)
 }
 
@@ -57,7 +65,7 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const { name, number } = req.body
 
   const newPerson = new Person({
@@ -73,20 +81,12 @@ app.post('/api/persons', (req, res) => {
     })
   }
 
-  // Person.find({ name: name }).then((foundPerson) => {
-  //   if (foundPerson.length !== 0) {
-  //     res.status(400).json({
-  //       error: 'The name must be unique'
-  //     })
-  //   } else {
-  //     newPerson.save().then((person) => {
-  //       res.json(person)
-  //     })
-  //   }
-  // })
-  newPerson.save().then((person) => {
-    res.json(person)
-  })
+  newPerson
+    .save()
+    .then((person) => {
+      res.json(person)
+    })
+    .catch((err) => next(err))
 })
 
 app.put('/api/persons/:id', (req, res) => {
