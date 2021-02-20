@@ -107,16 +107,16 @@ app.put('/api/persons/:id', (req, res) => {
     .catch((err) => next(err))
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   const { id } = req.params
 
-  const person = persons.find((person) => person.id === parseInt(id))
-
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
+  Person.findById(id)
+    .then((person) => {
+      res.json(person)
+    })
+    .catch((err) => {
+      next(err)
+    })
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
