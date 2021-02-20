@@ -12,13 +12,13 @@ const PORT = process.env.PORT
 const errorHandler = (err, req, res, next) => {
   console.error(err.message)
 
-  if (err.name === 'CastError' && err.kind === 'ObjectId') {
+  if (err.name === 'CastError') {
     return res.status(400).json({ error: 'Wrong id format' })
   }
 
-  if (err.name === 'ValidationError' && err.errors.name.kind === 'unique') {
+  if (err.name === 'ValidationError') {
     return res.status(400).json({
-      message: 'The person already exists in the DB',
+      // message: 'The person already exists in the DB',
       error: err.message
     })
   }
@@ -89,7 +89,7 @@ app.post('/api/persons', (req, res, next) => {
     .catch((err) => next(err))
 })
 
-app.put('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
   console.log(`You tried to update the id: ${req.params.id}`)
   const { id } = req.params
   console.log(req.body)
@@ -100,7 +100,7 @@ app.put('/api/persons/:id', (req, res) => {
     number: number
   }
 
-  Person.findByIdAndUpdate(id, person, { new: true })
+  Person.findByIdAndUpdate(id, person, { new: true, runValidators: true })
     .then((result) => {
       res.json(result)
     })
