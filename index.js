@@ -4,6 +4,7 @@ const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
+const { response } = require('express')
 
 const PORT = process.env.PORT
 
@@ -92,11 +93,11 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
   const { id } = req.params
-  const deletedId = parseInt(id)
-
-  persons = persons.filter((person) => person.id !== deletedId)
-
-  res.status(204).end()
+  Person.findByIdAndDelete(id)
+    .then((result) => {
+      res.status(204).end()
+    })
+    .catch((err) => console.error(err))
 })
 
 app.listen(PORT, () => {
